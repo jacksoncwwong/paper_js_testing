@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="paper-full.js"></script>
+	<script type="text/paperscript" canvas="myCanvas">
+		var pathData1 = "M 30 40 L 70 40 C 90 40 90 75 60 85 A 40 40 0 0 1 20 20 L 80 80";
+		var pathData2 = "M 30 50 L 70 50";
+		var pathData3 = "M 70 60 L 30 60 C 10 60 10 20 40 15 A 40 38 0 1 1 20 80 L 80 20";
+		var Path1 = new Path(pathData1);
+		var Path2 = new Path(pathData2);
+		var Path3 = new Path(pathData3);
+		Path1.strokeColor = 'black';
+		Path2.strokeColor = 'red';
+		Path3.strokeColor = 'green';
+		var segments = 100;
+		var pathUnit1 = Path1.length/segments;
+		var pathUnit2 = Path2.length/segments;
+		var pathUnit3 = Path3.length/segments;
+		var myPath = new paper.Path({
+			fillColor: 'black',
+			strokeColor: 'black',
+			strokeWidth: 5,
+			strokeCap: 'round'
+		});
+		myPath.add(new Point(0, 0));
+		myPath.add(new Point(50, 0));
+		// maybe the idea is we write the entire path, then divide that path into segments, so say 1000 segments
+		// then we run a loop from 0-999, where at each segment we do a getLocation, then we add a new point to generate the new segment while removing the oldest segment
+		// maybe we use path.length, divide that into 1000, and use as offset for getLocationAt
+		var stopper = false;
+		function onFrame(event) {
+			if(!stopper) {
+				for(var i=0; i<segments; i++) {
+					var offset1 = pathUnit1 * i;
+					var location1 = Path1.getLocationAt(offset1);
+					var offset2 = pathUnit2 * i;
+					var location2 = Path2.getLocationAt(offset2);
+					var offset3 = pathUnit3 * i;
+					var location3 = Path3.getLocationAt(offset3);
+					console.log(location1, location2, location3);
+					// myPath.position.x += i;
+				};
+				stopper = true;
+				console.log(stopper);
+			};
+		}
+	</script>
+</head>
+<body>
+	<canvas id="myCanvas" resize="true"></canvas>
+</body>
+</html>
