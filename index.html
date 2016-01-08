@@ -10,27 +10,37 @@
 		var Path1 = new Path(pathData1);
 		var Path2 = new Path(pathData2);
 		var Path3 = new Path(pathData3);
-		Path1.strokeColor = 'black';
-		Path2.strokeColor = 'red';
-		Path3.strokeColor = 'green';
-		var segments = 100;
+		var menuStrokeWidth = 6;
+		Path1.strokeWidth = menuStrokeWidth;
+		Path2.strokeWidth = menuStrokeWidth;
+		Path3.strokeWidth = menuStrokeWidth;
+		var menuStrokeCap = 'round';
+		Path1.strokeCap = menuStrokeCap;
+		Path2.strokeCap = menuStrokeCap;
+		Path3.strokeCap = menuStrokeCap;
+		var segments = 10;
 		var pathUnit1 = Path1.length/segments;
 		var pathUnit2 = Path2.length/segments;
 		var pathUnit3 = Path3.length/segments;
-		var myPath = new paper.Path({
-			fillColor: 'black',
+		var pathParams = {
 			strokeColor: 'black',
-			strokeWidth: 5,
+			strokeWidth: 6,
 			strokeCap: 'round'
-		});
-		myPath.add(new Point(0, 0));
-		myPath.add(new Point(50, 0));
+		}
+		var drawPath1 = new paper.Path(pathParams);
+		var drawPath2 = new paper.Path(pathParams);
+		var drawPath3 = new paper.Path(pathParams);
 		// maybe the idea is we write the entire path, then divide that path into segments, so say 1000 segments
 		// then we run a loop from 0-999, where at each segment we do a getLocation, then we add a new point to generate the new segment while removing the oldest segment
 		// maybe we use path.length, divide that into 1000, and use as offset for getLocationAt
 		var stopper = false;
 		function onFrame(event) {
 			if(!stopper) {
+				setTimeout(runDraw, 1000);
+				stopper = true;
+				console.log(stopper);
+			};
+			function runDraw() {
 				for(var i=0; i<segments; i++) {
 					var offset1 = pathUnit1 * i;
 					var location1 = Path1.getLocationAt(offset1);
@@ -40,11 +50,12 @@
 					var location3 = Path3.getLocationAt(offset3);
 					console.log(location1, location2, location3);
 					// myPath.position.x += i;
+					drawPath1.add(new Point(location1._point.x, location1._point.y));
+					drawPath2.add(new Point(location2._point.x, location2._point.y));
+					drawPath3.add(new Point(location3._point.x, location3._point.y));
 				};
-				stopper = true;
-				console.log(stopper);
 			};
-		}
+		};
 	</script>
 </head>
 <body>
