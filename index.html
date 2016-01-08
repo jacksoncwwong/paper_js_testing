@@ -18,7 +18,7 @@
 		Path1.strokeCap = menuStrokeCap;
 		Path2.strokeCap = menuStrokeCap;
 		Path3.strokeCap = menuStrokeCap;
-		var segments = 10;
+		var segments = 1000;
 		var pathUnit1 = Path1.length/segments;
 		var pathUnit2 = Path2.length/segments;
 		var pathUnit3 = Path3.length/segments;
@@ -33,26 +33,23 @@
 		// maybe the idea is we write the entire path, then divide that path into segments, so say 1000 segments
 		// then we run a loop from 0-999, where at each segment we do a getLocation, then we add a new point to generate the new segment while removing the oldest segment
 		// maybe we use path.length, divide that into 1000, and use as offset for getLocationAt
-		var stopper = false;
+		var tracker = 1;
 		function onFrame(event) {
-			if(!stopper) {
-				setTimeout(runDraw, 1000);
-				stopper = true;
-				console.log(stopper);
-			};
-			function runDraw() {
-				for(var i=0; i<segments; i++) {
-					var offset1 = pathUnit1 * i;
+			// trouble here is we need lots of segments for better resolution, but having too many based on how the code is written makes the animation take a long time.
+			if(tracker<=segments) {
+				for (var i=0; i<50; i++) {
+					var offset1 = pathUnit1 * tracker;
 					var location1 = Path1.getLocationAt(offset1);
-					var offset2 = pathUnit2 * i;
+					var offset2 = pathUnit2 * tracker;
 					var location2 = Path2.getLocationAt(offset2);
-					var offset3 = pathUnit3 * i;
+					var offset3 = pathUnit3 * tracker;
 					var location3 = Path3.getLocationAt(offset3);
 					console.log(location1, location2, location3);
-					// myPath.position.x += i;
 					drawPath1.add(new Point(location1._point.x, location1._point.y));
 					drawPath2.add(new Point(location2._point.x, location2._point.y));
 					drawPath3.add(new Point(location3._point.x, location3._point.y));
+					tracker++;
+					console.log(tracker);
 				};
 			};
 		};
